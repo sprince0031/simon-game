@@ -1,67 +1,49 @@
-$(document).ready(function() {
-    
-    let level = 1;
-    let lostGame = false;
-    let pattern = [];
+let generatedPattern = [];
+let userPattern = [];
+let buttonColours = ["red", "blue", "green", "yellow"];
+let level = 1;
+let lostGame = false;
 
-    function genRandom() {
-        return Math.floor(Math.random() * 4 + 1);
+function chooseSoundEffect(colourChoice) {
+    switch (colourChoice) {
+        case "red":
+            new Audio("./sounds/red.mp3").play();
+            break;
+        case "blue":
+            new Audio("./sounds/blue.mp3").play();
+            break;
+        case "green":
+            new Audio("./sounds/green.mp3").play();
+            break;
+        case "yellow":
+            new Audio("./sounds/yellow.mp3").play();
+            break;
     }
+}
 
-    $(document).on("keydown", function() {
-        if (lostGame) {
-            $("#level-title").text("Game Over, Press Any Key to Restart");
-            level = 1;
-            pattern = [];
-            lostGame = false;
-        } else {
-            $("#level-title").text("Level " + level);
-        }
-    });
+function genRandom() {
+    let randomNumber = Math.floor(Math.random() * 4);
+    let colourChoice = buttonColours[randomNumber];
+    generatedPattern.push(colourChoice);
 
-    while(!lostGame) {
+    $("#"+colourChoice).fadeOut(100).fadeIn(100);
+    chooseSoundEffect(colourChoice);
 
-        switch(genRandom()) {
-            case 1:
-                pattern.push(1);
-                $("#green").addClass("pressed");
-                setTimeout(function() {
-                    $("#green").removeClass("pressed");
-                }, 100);
-                break;
-            case 2:
-                pattern.push(2);
-                $("#red").addClass("pressed");
-                setTimeout(function() {
-                    $("#red").removeClass("pressed");
-                }, 100);
-                break;
-            case 3:
-                pattern.push(3);
-                $("#yellow").addClass("pressed");
-                setTimeout(function() {
-                    $("#yellow").removeClass("pressed");
-                }, 100);
-                break;
-            case 4:
-                pattern.push(4);
-                $("#blue").addClass("pressed");
-                setTimeout(function() {
-                    $("#blue").removeClass("pressed");
-                }, 100);
-                break;
-        }
+}
 
-        console.log(pattern);
-        setTimeout(function() {
-            // Do Nothing
-            console.log("Waiting..");
-        }, 5000);
-
-        if (pattern[pattern.length - 1] === 4) {
-            lostGame = true;
-        }
-
-    }
+$(".btn").on("click", function (event) {
+    let userChoice = $(this).attr("id");
+    chooseSoundEffect(userChoice);
+    $("#"+userChoice).toggleClass(".pressed");
+    setTimeout(function() {
+        $("#"+userChoice).removeClass(".pressed");
+    }, 1000);
 
 });
+
+while (! lostGame) {
+    genRandom();
+    if (generatedPattern.length > 4) {
+        break;
+    }
+}
