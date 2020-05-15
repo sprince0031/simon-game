@@ -1,49 +1,72 @@
 let generatedPattern = [];
 let userPattern = [];
 let buttonColours = ["red", "blue", "green", "yellow"];
-let level = 1;
-let lostGame = false;
+let level = 0;
+let gameStart = true;
 
-function chooseSoundEffect(colourChoice) {
-    switch (colourChoice) {
-        case "red":
-            new Audio("./sounds/red.mp3").play();
-            break;
-        case "blue":
-            new Audio("./sounds/blue.mp3").play();
-            break;
-        case "green":
-            new Audio("./sounds/green.mp3").play();
-            break;
-        case "yellow":
-            new Audio("./sounds/yellow.mp3").play();
-            break;
+$(".btn").on("click", function () {
+    let userChoice = $(this).attr("id");
+    chooseSoundEffect(userChoice);
+    $("#"+userChoice).addClass("pressed");
+    setTimeout(function() {
+        $("#"+userChoice).removeClass("pressed");
+    }, 100);
+    userPattern.push(userChoice);
+    // console.log("user: " + userPattern);
+
+    checkAnswer(userPattern.length - 1);
+    
+});
+
+$(document).on("keydown", function(event) {
+    if (gameStart && event.key === "Enter") {
+        genSequence();
+        gameStart = false;
+        $("#level-title").text("Level " + level);
     }
+});
+
+function chooseSoundEffect(soundFile) {
+    new Audio("./sounds/" + soundFile + ".mp3").play();
 }
 
-function genRandom() {
+function genSequence() {
+    userPattern = [];
     let randomNumber = Math.floor(Math.random() * 4);
     let colourChoice = buttonColours[randomNumber];
     generatedPattern.push(colourChoice);
-
+    // console.log("generated: " + generatedPattern);
     $("#"+colourChoice).fadeOut(100).fadeIn(100);
     chooseSoundEffect(colourChoice);
 
+    level++;
+    $("#level-title").text("Level " + level);
+
 }
 
-$(".btn").on("click", function (event) {
-    let userChoice = $(this).attr("id");
-    chooseSoundEffect(userChoice);
-    $("#"+userChoice).toggleClass(".pressed");
-    setTimeout(function() {
-        $("#"+userChoice).removeClass(".pressed");
-    }, 1000);
+function checkAnswer(index) {
 
-});
+    if (generatedPattern[index] === userPattern[index]) {
+        console.log("correct answer!")
 
-while (! lostGame) {
-    genRandom();
-    if (generatedPattern.length > 4) {
-        break;
+        if (index === generatedPattern.length - 1) {
+            setTimeout(function() {
+                genSequence();
+            }, 1000);
+        }
+
+    } else {
+        console.log("Game Over! :(");
+        $("body").addClass("game-over");
+        setTimeout(function() {
+            $("body").removeClass("game-over");
+        }, 100);
+        chooseSoundEffect("wrong");
+        $("#level-title").text("Game Over, Press Enter to Restart");
+        gameStart = true;
+        generatedPattern = [];
+        userPattern = [];
+        level = 0;
     }
+
 }
