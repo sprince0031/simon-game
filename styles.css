@@ -3,10 +3,12 @@
 body {
   text-align: center;
   background-color: #011F3F;
+  transition: 1.0s;
 }
 
 .body-god-mode {
   background-color: #111;
+  transition: 1.0s;
 }
 
 #level-title {

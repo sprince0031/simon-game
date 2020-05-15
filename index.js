@@ -167,7 +167,15 @@ function godMode(godModeCheat) {
         $("body").addClass("body-god-mode");
         speed = 200;
         $("#favicon").attr("href", "./images/thug-life.jpg");
-        $("title").text("🔥🔥🔥 GOD MODE 🔥🔥🔥")
+        $("title").text("🔥🔥🔥 GOD MODE 🔥🔥🔥");
+        if (typeof godModeBgm.loop === 'boolean') {
+            godModeBgm.loop = true;
+        } else {
+            godModeBgm.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+        }
         godModeBgm.play();
     } else {
         let titleText;
