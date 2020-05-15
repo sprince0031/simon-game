@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
 body {
   text-align: center;
   background-color: #011F3F;
+}
+
+.body-god-mode {
+  background-color: #111;
 }
 
 #level-title {
@@ -50,4 +56,24 @@ body {
 .pressed {
   box-shadow: 0 0 20px white;
   background-color: grey;
+}
+
+.cheat-activated {
+  color: #eee;
+  padding: 3px 10px 1px 5px;
+  margin-right: 80%;
+  background-color: #111;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: left;
+  font-family: 'Comic Neue';
+  opacity: 0.8;
+}
+
+.god-mode {
+  background-color: #111;
+  background: url("./images/god-mode-hellfire.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  border-color: #eee;
 }
